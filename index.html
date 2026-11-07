@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browser-Based Interior Design Studios</title>
+  <meta name="description" content="Preview paint, wallpaper and lighting in 3D, or compose a furnished room, right in your browser. Built with A-Frame and Three.js, with VR headset support." />
+  <link rel="stylesheet" href="/src/landing.css" />
+</head>
+
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="nav-brand">
+        <div class="brand-badge-icon" aria-hidden="true"></div>
+        <div class="brand-title-group">
+          <span class="nav-brand-title">Interior Studios</span>
+          <span class="nav-brand-sub">Two 3D studios, no install needed</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#studios" class="nav-link">Studios</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#wallpapers" class="nav-link">Wallpapers</a>
+        <a href="#paints" class="nav-link">Paint Palette</a>
+        <a href="#lighting" class="nav-link">Lighting</a>
+        <a href="#controls" class="nav-link">Controls</a>
+        <a href="#headsets" class="nav-link">VR Headsets</a>
+        <a href="/paint-wallpaper-studio.html" class="btn-primary">Explore Studios</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-pill-badge">
+        A-Frame + Three.js • Runs in your browser
+      </div>
+
+      <h1 class="hero-title">
+        Two ways to shape a space: <span>finish it or furnish it</span>
+      </h1>
+
+      <p class="hero-desc">
+        Preview paint, wallpaper and lighting in an open 3D room, or arrange a furnished interior and adjust its finishes. Both studios run in your browser and work on a desktop, a phone or a VR headset.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/paint-wallpaper-studio.html" class="btn-primary hero-cta-launch">
+          🎨 Paint & Wallpaper Studio
+        </a>
+        <a href="/room-composer.html" class="btn-secondary">
+          🛋️ Open Room Composer
+        </a>
+      </div>
+
+      <!-- Hero Visual Preview Showcase Card -->
+      <div class="hero-preview-frame">
+        <div class="preview-inner">
+          <div class="preview-badge-row">
+            <span class="preview-badge">📐 7.0m × 8.0m Open Suite</span>
+            <span class="preview-badge">☀️ Dynamic Solar Simulation</span>
+            <span class="preview-badge">⭐ Accent Wall Customizer</span>
+            <span class="preview-badge">🥽 Meta Quest & Vision Pro Ready</span>
+          </div>
+
+          <div class="preview-center-callout">
+            <div class="preview-callout-tag">Immersive WebXR Walkthrough</div>
+            <h2 class="preview-callout-title">Pristine Unobstructed Walls for Precision Inspection</h2>
+            <p class="preview-callout-desc">
+              Experience floor-to-ceiling clarity. View raking light across plaster surfaces, compare wallpaper motifs against baseboards, and verify paint undertones from 1.5m inspection viewpoints.
+            </p>
+          </div>
+
+          <div class="preview-bottom-bar">
+            <div class="preview-swatches-strip">
+              <span style="font-size: 12px; color: #9ca3af; margin-right: 4px;">Sample finishes:</span>
+              <div class="preview-chip" style="background: #f4f1ea;" title="Alabaster White"></div>
+              <div class="preview-chip" style="background: #7a8471;" title="Olive Haze"></div>
+              <div class="preview-chip" style="background: #a35d4d;" title="Warm Terracotta"></div>
+              <div class="preview-chip" style="background: #2c3036;" title="Parisian Charcoal"></div>
+              <div class="preview-chip" style="background: #1e2b3c;" title="Aegean Navy"></div>
+              <div class="preview-chip" style="background: #68856c;" title="Botanical Wallpaper"></div>
+              <div class="preview-chip" style="background: #1c1f24; border-color: #c9a875;" title="Art Deco Wallpaper"></div>
+            </div>
+
+            <a href="/paint-wallpaper-studio.html" class="btn-primary" style="padding: 8px 18px; font-size: 12px;">
+              Enter the room →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section studios-section" id="studios">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Two tools</span>
+        <h2 class="section-title">Choose your studio</h2>
+        <p class="section-desc">One studio for testing finishes on bare walls, and one for composing a furnished room. Each uses a different 3D library.</p>
+      </div>
+
+      <div class="studio-grid">
+        <article class="studio-card studio-card--paint">
+          <div class="studio-card-topline"><span>01 / Surface finishes</span><span class="studio-mark">A-FRAME</span></div>
+          <h3>Paint & Wallpaper Studio</h3>
+          <p>Test paint colours, sheen levels and wallpaper patterns in an open room. Switch between lighting presets and walk around on desktop or in VR.</p>
+          <div class="studio-stack"><strong>Stack</strong><span>A-Frame 1.6</span><span>A-Frame Extras</span><span>Blink Controls</span><span>WebXR</span></div>
+          <a class="studio-link" href="/paint-wallpaper-studio.html">Launch Paint & Wallpaper Studio <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="studio-card studio-card--room">
+          <div class="studio-card-topline"><span>02 / Room layout</span><span class="studio-mark">THREE.JS</span></div>
+          <h3>Interior Room Composer</h3>
+          <p>Build a furnished interior by adjusting wall and floor finishes, lighting and room measurements, with a live 3D view that updates as you go.</p>
+          <div class="studio-stack"><strong>Stack</strong><span>Three.js</span><span>OrbitControls</span><span>WebXR VRButton</span><span>Vite</span></div>
+          <a class="studio-link" href="/room-composer.html">Launch Interior Room Composer <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Section -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">Built for painters and decorators</h2>
+        <p class="section-desc">
+          Show clients how a finish will look, and agree on it, before the first coat of primer goes on.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">🎨</div>
+          <h3 class="feature-card-title">Color Wheel & Hex Code Input</h3>
+          <p class="feature-card-desc">
+            Pick any custom hue with the native color wheel or type exact manufacturer `#HEX` codes (Sherwin-Williams, Benjamin Moore, Farrow & Ball) with real-time updates on 3D wall planes.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">📜</div>
+          <h3 class="feature-card-title">Five designer wallpapers</h3>
+          <p class="feature-card-desc">
+            Each pattern is drawn in your browser, so there are no image files to download and nothing to break. Pages load quickly and the patterns stay sharp up close.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">⭐</div>
+          <h3 class="feature-card-title">Choose which wall to change</h3>
+          <p class="feature-card-desc">
+            Style the <strong>accent wall</strong> on its own, such as a bold wallpaper with calm paint around it, or apply a finish to <strong>all walls</strong> at once.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">☀️</div>
+          <h3 class="feature-card-title">Solar & Lighting Scenarios</h3>
+          <p class="feature-card-desc">
+            Simulate 5500K bright morning daylight through panoramic glass windows, 3200K golden sunset raking light, and 2700K cozy evening spotlights & cove LEDs.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">✨</div>
+          <h3 class="feature-card-title">Paint sheen levels</h3>
+          <p class="feature-card-desc">
+            Switch between <strong>flat/matte</strong>, <strong>eggshell/satin</strong> and <strong>semi-gloss</strong> to see how much light each finish reflects.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">🪵</div>
+          <h3 class="feature-card-title">Flooring options</h3>
+          <p class="feature-card-desc">
+            Check how your wall finish pairs with white oak, dark walnut, Carrara marble or polished concrete.
+          </p>
+        </div>
+
+        <!-- Feature 7 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">🪑</div>
+          <h3 class="feature-card-title">Staging & Open Room Modes</h3>
+          <p class="feature-card-desc">
+            Keeps the room completely open by default for unobstructed wall inspection, with a one-click staging toggle to view with a modular sofa, travertine table, armchair, and lamp.
+          </p>
+        </div>
+
+        <!-- Feature 8 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">📐</div>
+          <h3 class="feature-card-title">Room measurements</h3>
+          <p class="feature-card-desc">
+            Show dimension lines in the room: 7 m wide, 8 m deep and 3 m high. Handy when estimating paint or wallpaper quantities.
+          </p>
+        </div>
+
+        <!-- Feature 9 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrap">📦</div>
+          <h3 class="feature-card-title">Import your own model</h3>
+          <p class="feature-card-desc">
+            Drag in a <code>.glb</code> or <code>.gltf</code> file exported from SketchUp, Revit, Blender or 3ds Max to view a client's own room.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wallpapers Showcase Section -->
+  <section class="section" id="wallpapers" style="background: rgba(255, 255, 255, 0.015); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Wallpaper collection</span>
+        <h2 class="section-title">Designer wallpapers</h2>
+        <p class="section-desc">
+          Five patterns, generated in your browser so they stay crisp at any distance.
+        </p>
+      </div>
+
+      <div class="wallpaper-gallery-grid">
+        <div class="wp-card">
+          <div class="wp-preview-thumb" style="background: #5d7e62;">🌿</div>
+          <div class="wp-name">Botanical Fronds</div>
+          <div class="wp-style">Sage & Gold Foil Leaf Silhouette</div>
+        </div>
+
+        <div class="wp-card">
+          <div class="wp-preview-thumb" style="background: #1b1e22; color: #c9a875;">✨</div>
+          <div class="wp-name">Art Deco Arches</div>
+          <div class="wp-style">Gold arches on charcoal</div>
+        </div>
+
+        <div class="wp-card">
+          <div class="wp-preview-thumb" style="background: #ece7de; color: #7f7465;">📏</div>
+          <div class="wp-name">French Pinstripe</div>
+          <div class="wp-style">Fine linen-style stripes</div>
+        </div>
+
+        <div class="wp-card">
+          <div class="wp-preview-thumb" style="background: #d1c3b0; color: #5a4833;">🌾</div>
+          <div class="wp-name">Natural Grasscloth</div>
+          <div class="wp-style">Woven natural fibre</div>
+        </div>
+
+        <div class="wp-card">
+          <div class="wp-preview-thumb" style="background: #d0c7bc; color: #62594e;">🏺</div>
+          <div class="wp-name">Venetian Limewash</div>
+          <div class="wp-style">Mottled clay plaster finish</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curated Paint Palette Section -->
+  <section class="section" id="paints">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Paint palette</span>
+        <h2 class="section-title">Ten ready-made paint colours</h2>
+        <p class="section-desc">
+          A hand-picked set of popular shades. Need something else? Enter any hex code to match a colour exactly.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; max-width: 900px; margin: 0 auto;">
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #f4f1ea; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Alabaster White</div>
+          <div class="wp-style">SW 7008 • #F4F1EA</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #d8cfc4; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Nordic Greige</div>
+          <div class="wp-style">BM 1548 • #D8CFC4</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #7a8471; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Olive Haze</div>
+          <div class="wp-style">SW 9130 • #7A8471</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #a35d4d; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Warm Terracotta</div>
+          <div class="wp-style">SW 6334 • #A35D4D</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #2c3036; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Parisian Charcoal</div>
+          <div class="wp-style">SW 7069 • #2C3036</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #1e2b3c; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Aegean Navy</div>
+          <div class="wp-style">SW 6244 • #1E2B3C</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #bfa39d; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Dusty Rose</div>
+          <div class="wp-style">BM 1262 • #BFA39D</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #c99a52; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Warm Ochre</div>
+          <div class="wp-style">SW 6388 • #C99A52</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #c5d1c5; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Celadon Mist</div>
+          <div class="wp-style">BM 2140-50 • #C5D1C5</div>
+        </div>
+        <div class="wp-card">
+          <div style="width: 100%; height: 60px; border-radius: 8px; background: #5b6f84; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.15);"></div>
+          <div class="wp-name">Slate Blue</div>
+          <div class="wp-style">SW 9140 • #5B6F84</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Controls Guide Section -->
+  <section class="section" id="controls" style="background: rgba(255, 255, 255, 0.015); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Locomotion & Inputs</span>
+        <h2 class="section-title">Navigation Controls Guide</h2>
+        <p class="section-desc">
+          Smooth, responsive locomotion across desktop browsers, mobile devices, and immersive VR headsets.
+        </p>
+      </div>
+
+      <div class="controls-table-wrap">
+        <table class="controls-table">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Locomotion</th>
+              <th>Look Around</th>
+              <th>Interaction & Swatches</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="platform-badge">💻 Desktop & Laptop</span>
+              </td>
+              <td><code>W</code> <code>A</code> <code>S</code> <code>D</code> or Arrow Keys</td>
+              <td>Click & Drag Mouse</td>
+              <td>Left-click on HUD controls, color pickers, or floor rings</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="platform-badge">🥽 WebXR Headset</span>
+              </td>
+              <td>Left controller: point and release to teleport</td>
+              <td>Turn your head</td>
+              <td>Right controller: aim the laser pointer and squeeze the trigger</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="platform-badge">📱 Mobile & Tablet</span>
+              </td>
+              <td>On-screen viewpoint buttons & floor teleport rings</td>
+              <td>Touch Drag / Device Gyroscope</td>
+              <td>Tap on-screen UI menu & swatches</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Headset Compatibility Section -->
+  <section class="section" id="headsets">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Device support</span>
+        <h2 class="section-title">Works with VR headsets</h2>
+        <p class="section-desc">
+          Any headset with a WebXR-capable browser should work. There's nothing to install: open the page and enter VR.
+        </p>
+      </div>
+
+      <div class="headset-grid">
+        <div class="feature-card" style="text-align: center; align-items: center;">
+          <div class="feature-icon-wrap">🥽</div>
+          <h3 class="feature-card-title">Meta Quest 2, 3, 3S & Pro</h3>
+          <p class="feature-card-desc">Full head tracking and controller support in the Meta Quest Browser.</p>
+        </div>
+
+        <div class="feature-card" style="text-align: center; align-items: center;">
+          <div class="feature-icon-wrap">👓</div>
+          <h3 class="feature-card-title">Apple Vision Pro</h3>
+          <p class="feature-card-desc">High-resolution spatial audio & WebXR rendering in Safari with spatial hand tracking.</p>
+        </div>
+
+        <div class="feature-card" style="text-align: center; align-items: center;">
+          <div class="feature-icon-wrap">⚡</div>
+          <h3 class="feature-card-title">Pico 4 & Neo 3</h3>
+          <p class="feature-card-desc">WebXR rendering and controller teleporting in the Pico Browser.</p>
+        </div>
+
+        <div class="feature-card" style="text-align: center; align-items: center;">
+          <div class="feature-icon-wrap">🖥️</div>
+          <h3 class="feature-card-title">HTC Vive & PCVR</h3>
+          <p class="feature-card-desc">WebXR in Chrome, Edge or Firefox on a PC, connected through SteamVR.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Banner -->
+  <section class="cta-banner-section">
+    <div class="container">
+      <div class="cta-banner">
+        <h2 class="cta-title">Ready to step into your space?</h2>
+        <p class="cta-desc">
+          Pick a studio and start experimenting with paint, wallpaper, lighting and furniture in seconds.
+        </p>
+        <a href="/paint-wallpaper-studio.html" class="btn-primary hero-cta-launch">
+          🎨 Paint & Wallpaper Studio →
+        </a>
+        <a href="/room-composer.html" class="btn-secondary">
+          🛋️ Interior Room Composer →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Built with A-Frame, Three.js & WebXR for architectural surface visualization.</p>
+    </div>
+  </footer>
+</body>
+
+</html>

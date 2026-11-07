@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paint & Wallpaper Studio | WebXR Interior Studio</title>
+
+  <!-- Core A-Frame Library -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <!-- A-Frame Extras for locomotion & controls -->
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
+  <!-- Blink Teleport Controls for WebXR Headsets -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
+
+  <!-- App Stylesheet & Logic -->
+  <link rel="stylesheet" href="/src/style.css" />
+  <script type="module" src="/src/interior.js"></script>
+</head>
+
+<body>
+  <!-- Floating HUD Re-open Button (when collapsed) -->
+  <button id="hud-toggle-btn">⚙ Show Paint & Wallpaper Studio</button>
+
+  <!-- 2D Glassmorphic HUD Design Panel -->
+  <aside id="interior-hud">
+    <div class="hud-header">
+      <div class="brand-badge">
+        <div class="brand-icon" aria-hidden="true"></div>
+        <div>
+          <span class="brand-title">Paint & Wallpaper Studio</span>
+          <span class="brand-subtitle">Painting & Wallpaper VR Walkthrough</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="/room-composer.html" style="color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 500; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.05); transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='var(--primary)';" onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='var(--border-subtle)';" title="Open the Interior Room Composer">
+          Room Composer
+        </a>
+        <a href="/" style="color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 500; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-subtle); background: rgba(255,255,255,0.05); transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='var(--primary)';" onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='var(--border-subtle)';" title="Back to Home & Overview">
+          ← Home
+        </a>
+        <button class="hud-close-action" id="hud-close-btn" title="Collapse Panel">✕</button>
+      </div>
+    </div>
+
+    <!-- HUD Navigation Tabs -->
+    <nav class="hud-tabs">
+      <button class="hud-tab-btn active" data-target="tab-walls">🎨 Walls</button>
+      <button class="hud-tab-btn" data-target="tab-floors">🪵 Floors</button>
+      <button class="hud-tab-btn" data-target="tab-lighting">☀️ Lighting</button>
+      <button class="hud-tab-btn" data-target="tab-views">🧭 Views</button>
+      <button class="hud-tab-btn" data-target="tab-options">⚙️ Options</button>
+    </nav>
+
+    <!-- HUD Content Panes -->
+    <div class="hud-content">
+      <!-- Tab 1: Wall Painting & Wallpaper -->
+      <div class="hud-pane active" id="tab-walls">
+        <!-- Target Wall Selector -->
+        <div class="section-group">
+          <div class="section-label">
+            <span>Target Wall</span>
+            <span class="active-name-badge" id="active-target-label">Accent Feature Wall (Back)</span>
+          </div>
+          <div class="wall-target-bar">
+            <button class="wall-target-btn active" data-target-wall="accent">⭐ Accent Wall</button>
+            <button class="wall-target-btn" data-target-wall="all">🏠 All Walls</button>
+            <button class="wall-target-btn" data-target-wall="left">◀ Left Wall</button>
+            <button class="wall-target-btn" data-target-wall="front">▶ Front Wall</button>
+          </div>
+        </div>
+
+        <!-- Designer Wallpaper Patterns -->
+        <div class="section-group">
+          <div class="section-label">
+            <span>Designer Wallpapers</span>
+            <span class="active-name-badge">Textured & Printed</span>
+          </div>
+          <div class="wallpaper-grid">
+            <button class="wallpaper-pill active" data-id="botanical">
+              <span class="wallpaper-thumb wp-thumb-botanical">🌿</span>
+              <span class="wallpaper-title">Botanical Fronds<br><small style="color:#9ca3af">Sage & Gold</small></span>
+            </button>
+            <button class="wallpaper-pill" data-id="deco">
+              <span class="wallpaper-thumb wp-thumb-deco">✨</span>
+              <span class="wallpaper-title">Art Deco Arches<br><small style="color:#9ca3af">Gold & Charcoal</small></span>
+            </button>
+            <button class="wallpaper-pill" data-id="stripe">
+              <span class="wallpaper-thumb wp-thumb-stripe">📏</span>
+              <span class="wallpaper-title">French Pinstripe<br><small style="color:#9ca3af">Tailored Linen</small></span>
+            </button>
+            <button class="wallpaper-pill" data-id="grasscloth">
+              <span class="wallpaper-thumb wp-thumb-grasscloth">🌾</span>
+              <span class="wallpaper-title">Natural Grasscloth<br><small style="color:#9ca3af">Woven Fiber</small></span>
+            </button>
+            <button class="wallpaper-pill" data-id="limewash" style="grid-column: span 2;">
+              <span class="wallpaper-thumb wp-thumb-limewash">🏺</span>
+              <span class="wallpaper-title">Venetian Roman Limewash<br><small style="color:#9ca3af">Artisanal Mottled Clay Plaster</small></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Paint Colors & Palette -->
+        <div class="section-group">
+          <div class="section-label">
+            <span>Interior Paint Colors</span>
+            <span class="active-name-badge" id="active-finish-name">Alabaster White</span>
+          </div>
+
+          <!-- Custom Color Picker Tool -->
+          <div class="custom-picker-box">
+            <div class="color-input-wrapper" title="Click to open Color Wheel / Eyedropper">
+              <input type="color" id="paint-color-input" value="#f4f1ea" />
+            </div>
+            <div class="color-picker-info">
+              <span class="color-picker-label">Color Wheel / Custom Code</span>
+              <div class="hex-input-row">
+                <input type="text" id="paint-hex-input" class="hex-input-field" value="#F4F1EA" maxlength="7" placeholder="#HEX" />
+                <span class="custom-picker-tip">Tap circle to pick any color</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Curated Designer Paint Swatches -->
+          <div class="paint-grid">
+            <button class="paint-color-pill active" data-hex="#f4f1ea" data-name="Alabaster White" style="background: #f4f1ea;" title="Alabaster White (SW 7008)"></button>
+            <button class="paint-color-pill" data-hex="#d8cfc4" data-name="Nordic Greige" style="background: #d8cfc4;" title="Nordic Greige"></button>
+            <button class="paint-color-pill" data-hex="#7a8471" data-name="Olive Haze" style="background: #7a8471;" title="Olive Haze (SW 9130)"></button>
+            <button class="paint-color-pill" data-hex="#a35d4d" data-name="Warm Terracotta" style="background: #a35d4d;" title="Warm Terracotta (SW 6334)"></button>
+            <button class="paint-color-pill" data-hex="#2c3036" data-name="Parisian Charcoal" style="background: #2c3036;" title="Parisian Charcoal (SW 7069)"></button>
+            <button class="paint-color-pill" data-hex="#1e2b3c" data-name="Aegean Navy" style="background: #1e2b3c;" title="Aegean Navy (SW 6244)"></button>
+            <button class="paint-color-pill" data-hex="#bfa39d" data-name="Dusty Rose" style="background: #bfa39d;" title="Dusty Rose Mauve"></button>
+            <button class="paint-color-pill" data-hex="#c99a52" data-name="Warm Ochre" style="background: #c99a52;" title="Warm Ochre Mustard"></button>
+            <button class="paint-color-pill" data-hex="#c5d1c5" data-name="Celadon Mist" style="background: #c5d1c5;" title="Pale Celadon Mist"></button>
+            <button class="paint-color-pill" data-hex="#5b6f84" data-name="Slate Blue" style="background: #5b6f84;" title="Heritage Slate Blue"></button>
+          </div>
+
+          <!-- Paint Sheen Level -->
+          <div class="sheen-bar">
+            <button class="sheen-btn active" data-sheen="matte">Flat / Matte</button>
+            <button class="sheen-btn" data-sheen="satin">Eggshell / Satin</button>
+            <button class="sheen-btn" data-sheen="gloss">Semi-Gloss</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Flooring Finishes -->
+      <div class="hud-pane" id="tab-floors">
+        <div class="section-group">
+          <div class="section-label">
+            <span>Floor Finish Pairing</span>
+            <span class="active-name-badge" id="active-floor-name">White Oak Parquet</span>
+          </div>
+          <div class="floor-grid">
+            <button class="floor-pill active" data-floor="oak">
+              <span class="floor-icon-thumb floor-thumb-oak"></span>
+              <span class="floor-info-title">White Oak<br><small style="color:#9ca3af">Scandinavian</small></span>
+            </button>
+            <button class="floor-pill" data-floor="walnut">
+              <span class="floor-icon-thumb floor-thumb-walnut"></span>
+              <span class="floor-info-title">Dark Walnut<br><small style="color:#9ca3af">American Rich</small></span>
+            </button>
+            <button class="floor-pill" data-floor="marble">
+              <span class="floor-icon-thumb floor-thumb-marble"></span>
+              <span class="floor-info-title">Carrara Marble<br><small style="color:#9ca3af">Italian Veined</small></span>
+            </button>
+            <button class="floor-pill" data-floor="concrete">
+              <span class="floor-icon-thumb floor-thumb-concrete"></span>
+              <span class="floor-info-title">Polished Concrete<br><small style="color:#9ca3af">Architectural</small></span>
+            </button>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 14px;">
+          Inspect how your chosen wall paint and wallpaper reflect against different floor tones and textures.
+        </p>
+      </div>
+
+      <!-- Tab 3: Lighting & Mood Presets -->
+      <div class="hud-pane" id="tab-lighting">
+        <div class="section-group">
+          <div class="section-label">
+            <span>Solar & Lighting Environment</span>
+          </div>
+          <div class="lighting-grid">
+            <button class="lighting-btn active" data-preset="day">
+              <span class="lighting-icon">☀️</span>
+              <span class="lighting-name">Daylight</span>
+            </button>
+            <button class="lighting-btn" data-preset="sunset">
+              <span class="lighting-icon">🌅</span>
+              <span class="lighting-name">Golden Hour</span>
+            </button>
+            <button class="lighting-btn" data-preset="night">
+              <span class="lighting-icon">🌙</span>
+              <span class="lighting-name">Midnight</span>
+            </button>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-top: 14px;">
+          Painters test paint undertones under direct 5500K daylight, warm 3200K sunset rays, and 2700K evening interior ceiling spot illumination.
+        </p>
+      </div>
+
+      <!-- Tab 4: Quick Viewpoint Teleports -->
+      <div class="hud-pane" id="tab-views">
+        <div class="section-group">
+          <div class="section-label">
+            <span>Wall Inspection Angles</span>
+          </div>
+          <div class="viewpoints-grid">
+            <button class="viewpoint-btn" data-x="0" data-y="0" data-z="0.5" data-ry="0">
+              <span>⭐ Accent Wall Center (3.5m Distance)</span>
+              <span class="arrow-indicator">→</span>
+            </button>
+            <button class="viewpoint-btn" data-x="0" data-y="0" data-z="-2.5" data-ry="0">
+              <span>🔍 Close-up Surface Inspection (1.5m)</span>
+              <span class="arrow-indicator">→</span>
+            </button>
+            <button class="viewpoint-btn" data-x="2.4" data-y="0" data-z="-1.4" data-ry="-120">
+              <span>◀ Corner Raking Light Perspective</span>
+              <span class="arrow-indicator">→</span>
+            </button>
+            <button class="viewpoint-btn" data-x="0" data-y="0" data-z="3.4" data-ry="0">
+              <span>🚪 Suite Entrance Wide Overview</span>
+              <span class="arrow-indicator">→</span>
+            </button>
+            <button class="viewpoint-btn" data-x="0" data-y="3.8" data-z="0.5" data-rx="-65" data-ry="0">
+              <span>📐 Birds-Eye Architectural Plan</span>
+              <span class="arrow-indicator">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 5: Options, Dimensions & Furniture Toggle -->
+      <div class="hud-pane" id="tab-options">
+        <div class="section-group">
+          <div class="section-label">
+            <span>Staging & Measurements</span>
+          </div>
+          <!-- Furniture Toggle Button -->
+          <button class="action-button-primary" id="toggle-furniture-btn" style="margin-bottom: 8px;">
+            🪑 Show Furniture (For Staging)
+          </button>
+          <!-- Measurements Toggle Button -->
+          <button class="action-button-primary" id="toggle-dimensions-btn">
+            📐 Show Measurements
+          </button>
+        </div>
+
+        <!-- Custom 3D Model Drop Zone -->
+        <div class="section-group" style="margin-top: 14px;">
+          <div class="section-label">
+            <span>Load Custom Space (.glb / .gltf)</span>
+          </div>
+          <div class="drop-zone" id="model-drop-zone" onclick="document.getElementById('glb-file-input').click()">
+            <span class="drop-icon">📦</span>
+            <div class="drop-text">Click or Drop .glb file</div>
+            <div class="drop-subtext">Load any client room model directly</div>
+            <input type="file" id="glb-file-input" accept=".glb,.gltf" style="display: none;" />
+          </div>
+          <div id="custom-model-status" style="font-size: 11px; margin-top: 8px; text-align: center; color: var(--text-muted);">
+            Viewing Open Architectural Suite.
+          </div>
+          <button class="action-button-primary" id="toggle-model-view-btn" style="display: none; margin-top: 10px;">
+            Switch to Custom Model
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Bottom Quick Controls Pill -->
+  <div id="quick-nav-pill">
+    <div class="quick-control-tip">
+      <span class="kbd-badge">W A S D</span> Walk
+    </div>
+    <div class="quick-control-tip">
+      <span class="kbd-badge">Mouse Drag</span> Look
+    </div>
+    <div class="quick-control-tip">
+      <span class="kbd-badge">Left Click</span> Teleport / Wall Swatches
+    </div>
+    <div class="quick-control-tip">
+      <span class="kbd-badge">VR</span> Laser + Thumbstick Teleport
+    </div>
+  </div>
+
+  <!-- A-Frame 3D WebXR Paint & Wallpaper Scene -->
+  <a-scene
+    renderer="colorManagement: true; physicallyCorrectLights: true; exposure: 1.05; antialias: true;"
+    shadow="type: pcfsoft"
+    cursor="rayOrigin: mouse"
+    raycaster="objects: .clickable; far: 40">
+
+    <!-- Procedural Textures & Canvases Preloader -->
+    <a-assets timeout="10000">
+      <!-- Canvases generated dynamically by textures.js -->
+      <canvas id="canvas-oak" width="1024" height="1024"></canvas>
+      <canvas id="canvas-walnut" width="1024" height="1024"></canvas>
+      <canvas id="canvas-marble" width="1024" height="1024"></canvas>
+      <canvas id="canvas-concrete" width="1024" height="1024"></canvas>
+      <canvas id="canvas-view" width="2048" height="1024"></canvas>
+      
+      <!-- Wallpapers -->
+      <canvas id="canvas-wallpaper-botanical" width="1024" height="1024"></canvas>
+      <canvas id="canvas-wallpaper-deco" width="1024" height="1024"></canvas>
+      <canvas id="canvas-wallpaper-stripe" width="512" height="512"></canvas>
+      <canvas id="canvas-wallpaper-grasscloth" width="1024" height="1024"></canvas>
+      <canvas id="canvas-wallpaper-limewash" width="1024" height="1024"></canvas>
+
+      <!-- Optional User Model -->
+      <a-asset-item id="interior-model" src="./room.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Dynamic Architectural Lighting for Color & Texture Fidelity -->
+    <a-entity id="ambient-light" light="type: ambient; color: #ffffff; intensity: 0.85"></a-entity>
+    <a-entity id="sun-light" light="type: directional; color: #fffdf5; intensity: 1.4; castShadow: true; shadowCameraFar: 25; shadowCameraNear: 0.5; shadowCameraTop: 6; shadowCameraBottom: -6; shadowCameraLeft: -6; shadowCameraRight: 6; shadowMapHeight: 2048; shadowMapWidth: 2048;" position="5 8 4"></a-entity>
+
+    <!-- Recessed Ceiling Downlights for Raking Surface Light -->
+    <a-entity class="ceiling-spot" light="type: spot; color: #fff2d9; intensity: 0.4; angle: 45; penumbra: 0.5; distance: 6; decay: 2;" position="-1.5 2.95 0" rotation="-90 0 0"></a-entity>
+    <a-entity class="ceiling-spot" light="type: spot; color: #fff2d9; intensity: 0.4; angle: 45; penumbra: 0.5; distance: 6; decay: 2;" position="1.5 2.95 0" rotation="-90 0 0"></a-entity>
+    <a-entity class="ceiling-spot" light="type: spot; color: #fff2d9; intensity: 0.4; angle: 45; penumbra: 0.5; distance: 6; decay: 2;" position="0 2.95 -2" rotation="-90 0 0"></a-entity>
+
+    <!-- Perimeter Architectural Cove LED Glow -->
+    <a-entity class="cove-light" light="type: point; color: #ffbf73; intensity: 0.15; distance: 8; decay: 1.8;" position="0 2.9 -3.8"></a-entity>
+    <a-entity class="cove-light" light="type: point; color: #ffbf73; intensity: 0.15; distance: 8; decay: 1.8;" position="-3.3 2.9 0"></a-entity>
+
+    <!-- Sky Atmosphere -->
+    <a-sky color="#d9e9f7"></a-sky>
+
+    <!-- ============================================================== -->
+    <!-- OPEN ARCHITECTURAL SUITE FOR PAINTING & WALLPAPER (7m x 8m)   -->
+    <!-- ============================================================== -->
+    <a-entity id="procedural-room" visible="true">
+      
+      <!-- 1. FLOOR (7m x 8m) -->
+      <a-plane id="room-floor" class="ground clickable"
+        rotation="-90 0 0" position="0 0 0" width="7" height="8"
+        material="src: #canvas-oak; repeat: 4 4; roughness: 0.45; metalness: 0.05;"
+        shadow="receive: true">
+      </a-plane>
+
+      <!-- 2. CEILING (7m x 8m) -->
+      <a-plane id="room-ceiling"
+        rotation="90 0 0" position="0 3 0" width="7" height="8"
+        material="color: #faf9f6; roughness: 0.95;">
+      </a-plane>
+
+      <!-- Ceiling Perimeter Cove Lighting Trim -->
+      <a-box position="0 2.96 -3.92" width="6.9" height="0.08" depth="0.16" material="color: #2b2b2e;"></a-box>
+      <a-box position="-3.42 2.96 0" width="0.16" height="0.08" depth="7.9" material="color: #2b2b2e;"></a-box>
+
+      <!-- 3. WALLS (Targetable for Painting & Wallpaper) -->
+      <!-- Back Wall: Primary Accent Feature Wall (South, Z = -4) -->
+      <a-plane id="wall-back" class="interior-wall"
+        position="0 1.5 -4" rotation="0 0 0" width="7" height="3"
+        material="src: #canvas-wallpaper-botanical; repeat: 3 2; roughness: 0.8;"
+        shadow="receive: true">
+      </a-plane>
+
+      <!-- Left Wall (West, X = -3.5) -->
+      <a-plane id="wall-left" class="interior-wall"
+        position="-3.5 1.5 0" rotation="0 90 0" width="8" height="3"
+        material="color: #f4f1ea; roughness: 0.95;"
+        shadow="receive: true">
+      </a-plane>
+
+      <!-- Front Wall (North, Entrance, Z = +4) -->
+      <a-plane id="wall-front" class="interior-wall"
+        position="0 1.5 4" rotation="0 180 0" width="7" height="3"
+        material="color: #f4f1ea; roughness: 0.95;"
+        shadow="receive: true">
+      </a-plane>
+
+      <!-- Baseboard Moldings (10cm tall crisp white baseboard) -->
+      <a-box position="0 0.05 -3.96" width="6.96" height="0.1" depth="0.04" material="color: #ffffff; roughness: 0.7;"></a-box>
+      <a-box position="-3.46 0.05 0" width="0.04" height="0.1" depth="7.96" material="color: #ffffff; roughness: 0.7;"></a-box>
+      <a-box position="0 0.05 3.96" width="6.96" height="0.1" depth="0.04" material="color: #ffffff; roughness: 0.7;"></a-box>
+
+      <!-- 4. RIGHT WALL: FLOOR-TO-CEILING GLASS WINDOW (Natural Raking Daylight) -->
+      <a-box position="3.5 0.15 0" width="0.2" height="0.3" depth="8" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 2.85 0" width="0.2" height="0.3" depth="8" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 -3.9" width="0.15" height="2.4" depth="0.1" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 -1.3" width="0.15" height="2.4" depth="0.08" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 1.3" width="0.15" height="2.4" depth="0.08" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 3.9" width="0.15" height="2.4" depth="0.1" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 0" width="0.12" height="0.06" depth="7.9" material="color: #1a1a1c;"></a-box>
+      <a-box position="3.5 1.5 0" width="0.02" height="2.4" depth="7.8"
+        material="color: #c0dcf7; opacity: 0.22; transparent: true; roughness: 0.08; metalness: 0.85;">
+      </a-box>
+
+      <!-- Scenic Outdoor Vista Backdrop -->
+      <a-plane id="window-backdrop"
+        position="6.8 1.5 0" rotation="0 -90 0" width="10" height="5"
+        material="src: #canvas-view; roughness: 1.0; shader: flat;">
+      </a-plane>
+
+
+
+      <!-- ============================================== -->
+      <!-- ARCHITECTURAL DIMENSIONS OVERLAY (Toggleable) -->
+      <!-- ============================================== -->
+      <a-entity id="dimension-overlay" visible="false">
+        <!-- Room Width Dimension Line (7.00m) -->
+        <a-entity position="0 0.04 3.7">
+          <a-box width="6.8" height="0.01" depth="0.02" material="color: #aa3bff;"></a-box>
+          <a-box position="-3.4 0 0" width="0.02" height="0.01" depth="0.2" material="color: #aa3bff;"></a-box>
+          <a-box position="3.4 0 0" width="0.02" height="0.01" depth="0.2" material="color: #aa3bff;"></a-box>
+          <a-text value="Wall Width: 7.00 m" align="center" rotation="-90 0 0" position="0 0.05 0" color="#aa3bff" scale="0.8 0.8 0.8"></a-text>
+        </a-entity>
+
+        <!-- Room Depth Dimension Line (8.00m) -->
+        <a-entity position="-3.3 0.04 0">
+          <a-box width="0.02" height="0.01" depth="7.8" material="color: #aa3bff;"></a-box>
+          <a-box position="0 0 -3.9" width="0.2" height="0.01" depth="0.02" material="color: #aa3bff;"></a-box>
+          <a-box position="0 0 3.9" width="0.2" height="0.01" depth="0.02" material="color: #aa3bff;"></a-box>
+          <a-text value="Wall Depth: 8.00 m" align="center" rotation="-90 90 0" position="0 0.05 0" color="#aa3bff" scale="0.8 0.8 0.8"></a-text>
+        </a-entity>
+
+        <!-- Ceiling Height Dimension Line (3.00m) -->
+        <a-entity position="-3.35 1.5 -3.85">
+          <a-box width="0.02" height="2.9" depth="0.02" material="color: #aa3bff;"></a-box>
+          <a-text value="Wall Height: 3.00 m (21 m2 area)" align="left" position="0.08 0 0" color="#aa3bff" scale="0.7 0.7 0.7"></a-text>
+        </a-entity>
+      </a-entity>
+
+      <!-- ============================================================== -->
+      <!-- FURNITURE ENSEMBLE (REMOVED / HIDDEN BY DEFAULT FOR PAINTERS)  -->
+      <!-- Stored neatly inside this entity; can be toggled on later!    -->
+      <!-- ============================================================== -->
+      <a-entity id="furniture-group" visible="false">
+        <!-- Modular Sectional Sofa -->
+        <a-entity id="furniture-sofa" position="-0.6 0 0">
+          <a-box class="sofa-cushion" position="0 0.22 -0.8" width="2.6" height="0.42" depth="0.95" material="color: #eae6df; roughness: 0.9;" shadow="cast: true; receive: true"></a-box>
+          <a-box class="sofa-cushion" position="-0.85 0.22 -0.2" width="0.9" height="0.42" depth="1.3" material="color: #eae6df; roughness: 0.9;" shadow="cast: true; receive: true"></a-box>
+          <a-box class="sofa-cushion" position="0 0.54 -1.2" width="2.6" height="0.36" depth="0.25" material="color: #eae6df; roughness: 0.9;" shadow="cast: true"></a-box>
+          <a-box class="sofa-cushion" position="-1.25 0.54 -0.2" width="0.22" height="0.36" depth="1.3" material="color: #eae6df; roughness: 0.9;" shadow="cast: true"></a-box>
+          <a-box position="0.9 0.46 -1.02" rotation="0 -15 0" width="0.42" height="0.38" depth="0.16" material="color: #a35d4d; roughness: 0.85;" shadow="cast: true"></a-box>
+          <a-box position="-0.4 0.46 -1.02" rotation="0 10 0" width="0.4" height="0.38" depth="0.16" material="color: #7a8471; roughness: 0.85;" shadow="cast: true"></a-box>
+          <a-box position="0 0.04 -0.8" width="2.5" height="0.08" depth="0.85" material="color: #1a1a1c; roughness: 0.5;"></a-box>
+          <a-box position="-0.85 0.04 -0.2" width="0.8" height="0.08" depth="1.2" material="color: #1a1a1c; roughness: 0.5;"></a-box>
+        </a-entity>
+
+        <!-- Honed Travertine Oval Coffee Table -->
+        <a-entity id="furniture-table" position="-0.4 0 0.75">
+          <a-cylinder position="0 0.28 0" radius="0.55" height="0.06" material="src: #canvas-marble; roughness: 0.4; metalness: 0.05;" shadow="cast: true; receive: true"></a-cylinder>
+          <a-cylinder position="-0.28 0.12 0" radius="0.15" height="0.24" material="color: #d8cebf; roughness: 0.6;" shadow="cast: true"></a-cylinder>
+          <a-cylinder position="0.28 0.12 0" radius="0.15" height="0.24" material="color: #d8cebf; roughness: 0.6;" shadow="cast: true"></a-cylinder>
+        </a-entity>
+
+        <!-- Sculptural Accent Armchair -->
+        <a-entity id="furniture-chair" position="1.4 0 0.4" rotation="0 -40 0">
+          <a-box position="0 0.18 -0.32" width="0.75" height="0.36" depth="0.06" material="color: #dfcaa4; roughness: 0.5;" shadow="cast: true"></a-box>
+          <a-box position="-0.38 0.28 0" width="0.06" height="0.56" depth="0.7" material="color: #dfcaa4; roughness: 0.5;" shadow="cast: true"></a-box>
+          <a-box position="0.38 0.28 0" width="0.06" height="0.56" depth="0.7" material="color: #dfcaa4; roughness: 0.5;" shadow="cast: true"></a-box>
+          <a-box position="0 0.24 0" width="0.68" height="0.2" depth="0.65" material="color: #f0ede6; roughness: 0.85;" shadow="cast: true"></a-box>
+          <a-box position="0 0.48 -0.26" rotation="15 0 0" width="0.68" height="0.36" depth="0.14" material="color: #f0ede6; roughness: 0.85;" shadow="cast: true"></a-box>
+        </a-entity>
+
+        <!-- Arched Brass Floor Lamp -->
+        <a-entity id="furniture-lamp" position="-2.6 0 -1.8">
+          <a-cylinder position="0 0.08 0" radius="0.2" height="0.16" material="color: #1a1a1c; roughness: 0.3;" shadow="cast: true"></a-cylinder>
+          <a-cylinder position="0 1.0 0" radius="0.016" height="1.8" material="color: #c9a875; metalness: 0.75; roughness: 0.25;"></a-cylinder>
+          <a-cylinder position="0.4 1.9 0.2" rotation="0 25 45" radius="0.016" height="1.1" material="color: #c9a875; metalness: 0.75; roughness: 0.25;"></a-cylinder>
+          <a-cylinder position="1.0 2.1 0.5" rotation="0 25 80" radius="0.016" height="0.7" material="color: #c9a875; metalness: 0.75; roughness: 0.25;"></a-cylinder>
+          <a-cone position="1.2 1.85 0.6" rotation="180 0 0" radius-bottom="0.18" radius-top="0.04" height="0.16" material="color: #c9a875; metalness: 0.8; roughness: 0.2;" shadow="cast: true"></a-cone>
+          <a-sphere position="1.2 1.8 0.6" radius="0.05" material="color: #fffae8; shader: flat;"></a-sphere>
+        </a-entity>
+
+        <!-- Area Rug -->
+        <a-plane position="-0.2 0.006 0.2" rotation="-90 0 0" width="4.4" height="3.5" material="color: #eae6dd; roughness: 0.95;"></a-plane>
+      </a-entity>
+
+      <!-- Quick Teleport Floor Rings -->
+      <a-entity position="0 0.02 0.5" teleport-marker="pos: 0 0 0.5">
+        <a-ring rotation="-90 0 0" radius-inner="0.2" radius-outer="0.28" material="color: #c9a875; opacity: 0.5; transparent: true;"></a-ring>
+      </a-entity>
+      <a-entity position="0 0.02 -2.5" teleport-marker="pos: 0 0 -2.5">
+        <a-ring rotation="-90 0 0" radius-inner="0.2" radius-outer="0.28" material="color: #c9a875; opacity: 0.5; transparent: true;"></a-ring>
+      </a-entity>
+      <a-entity position="2.4 0.02 -1.4" teleport-marker="pos: 2.4 0 -1.4">
+        <a-ring rotation="-90 0 0" radius-inner="0.2" radius-outer="0.28" material="color: #c9a875; opacity: 0.5; transparent: true;"></a-ring>
+      </a-entity>
+    </a-entity>
+
+    <!-- Custom User 3D Model Container (.glb) -->
+    <a-entity id="custom-model-container" visible="false">
+      <a-entity id="custom-model-entity" gltf-model="#interior-model" position="0 0 0" class="ground"></a-entity>
+    </a-entity>
+
+    <!-- Player Rig (Desktop WASD + WebXR VR) -->
+    <a-entity id="rig" movement-controls="constrainToNavMesh: false; speed: 0.16" position="0 0 1.5">
+      <a-entity id="camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+        <a-entity cursor="fuse: false; rayOrigin: mouse" raycaster="objects: .clickable; far: 35"></a-entity>
+      </a-entity>
+      <a-entity id="left-controller" oculus-touch-controls="hand: left" blink-controls="cameraRig: #rig; teleportOrigin: #camera; collisionEntities: .ground;"></a-entity>
+      <a-entity id="right-controller" oculus-touch-controls="hand: right" laser-controls="hand: right" raycaster="objects: .clickable; far: 25" line="color: #c9a875; opacity: 0.75"></a-entity>
+    </a-entity>
+
+  </a-scene>
+</body>
+
+</html>

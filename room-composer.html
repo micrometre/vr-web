@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#202622">
+  <title>Interior Room Composer | Three.js</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+    :root { font-family: 'DM Sans', sans-serif; color: #f5f4ef; background: #202622; font-synthesis: none; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; min-height: 100vh; overflow: hidden; }
+    button, a { font: inherit; }
+    .studio { display: grid; grid-template-columns: 340px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); height: 100vh; }
+    .panel { z-index: 2; overflow-y: auto; padding: 22px 22px 28px; background: #f1efe8; color: #222923; box-shadow: 8px 0 30px #1115; }
+    .brand { display: flex; align-items: center; gap: 11px; padding-bottom: 22px; border-bottom: 1px solid #d7d7ce; }
+    .brand-mark { display: grid; width: 38px; height: 38px; place-items: center; background: #c56e50; color: white; font: 800 19px 'Manrope', sans-serif; }
+    .brand-title { display: block; font: 800 16px 'Manrope', sans-serif; letter-spacing: .03em; }
+    .brand-subtitle { display: block; margin-top: 2px; color: #73786f; font-size: 11px; }
+    .brand-home { margin-left: auto; color: #454e45; font-size: 12px; text-decoration: none; }
+    .intro { padding: 21px 0 16px; }
+    .eyebrow { color: #a4563d; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 6px 0 5px; font: 700 23px 'Manrope', sans-serif; }
+    .intro p { margin: 0; color: #6e756d; font-size: 12px; line-height: 1.55; }
+    .group { padding: 16px 0; border-top: 1px solid #d7d7ce; }
+    .group-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px; }
+    .group h2 { margin: 0; font: 700 12px 'Manrope', sans-serif; }
+    .value { color: #7c8178; font-size: 10px; }
+    .swatches { display: flex; gap: 9px; flex-wrap: wrap; }
+    .swatch { display: grid; width: 34px; height: 34px; padding: 0; place-items: center; border: 2px solid transparent; border-radius: 50%; cursor: pointer; }
+    .swatch[aria-pressed="true"] { border-color: #222923; box-shadow: 0 0 0 2px #f1efe8 inset; }
+    .wall-options .swatch { width: 39px; height: 39px; }
+    .option-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .option { min-height: 38px; padding: 7px 9px; border: 1px solid #d1d2c9; background: #f8f7f2; color: #454b44; font-size: 11px; text-align: left; cursor: pointer; }
+    .option[aria-pressed="true"] { border-color: #365748; background: #e4e9e1; color: #294535; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .action { min-height: 40px; border: 1px solid #c9cdc3; background: transparent; color: #303830; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .action:hover, .option:hover { border-color: #a4563d; }
+    .action.primary { border-color: #294535; background: #294535; color: white; }
+    .status { display: flex; align-items: center; gap: 7px; margin-top: 17px; color: #73786f; font-size: 10px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #62896c; }
+    .viewport { position: relative; min-width: 0; min-height: 0; background: #b9cbd0; }
+    #scene { display: block; width: 100%; height: 100%; }
+    .viewport-label { position: absolute; top: 22px; left: 24px; color: #26342e; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    .viewport-hint { position: absolute; right: 20px; bottom: 17px; padding: 9px 12px; background: #202622d9; color: #f5f4ef; font-size: 10px; }
+    #vr-button { position: absolute; right: 20px; top: 16px; }
+    #vr-button button { padding: 10px 14px; border: 0; background: #294535; color: white; font: 700 11px 'DM Sans', sans-serif; cursor: pointer; }
+    @media (max-width: 700px) {
+      body { overflow: auto; }
+      .studio { display: flex; height: 100dvh; flex-direction: column-reverse; }
+      .viewport { flex: 1 1 48%; min-height: 260px; }
+      .panel { flex: 1 1 52%; padding: 15px 18px 22px; }
+      .brand { padding-bottom: 12px; }
+      .intro { padding: 12px 0; }
+      h1 { font-size: 20px; }
+      .group { padding: 11px 0; }
+      .viewport-label { top: 15px; left: 15px; }
+      #vr-button { right: 14px; top: 10px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .panel { animation: arrive .45s ease-out both; }
+      @keyframes arrive { from { transform: translateX(-10px); opacity: .7; } to { transform: none; opacity: 1; } }
+    }
+  </style>
+  <script type="importmap">
+    { "imports": {
+      "three": "/node_modules/three/build/three.module.js",
+      "three/addons/": "/node_modules/three/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <main class="studio">
+    <aside class="panel" aria-label="Interior decoration controls">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div><span class="brand-title">Interior Room Composer</span><span class="brand-subtitle">Interior design / Three.js</span></div>
+        <a class="brand-home" href="/">Home</a>
+      </div>
+      <header class="intro">
+        <span class="eyebrow">Room composer</span>
+        <h1>Interior Decor</h1>
+        <p>Explore wall, floor, furniture, and light combinations in a live 3D room.</p>
+      </header>
+      <section class="group wall-options">
+        <div class="group-head"><h2>Wall color</h2><span class="value" id="wall-value">Alabaster</span></div>
+        <div class="swatches">
+          <button class="swatch" style="background:#f4f1ea" data-wall="#f4f1ea" data-name="Alabaster" aria-label="Alabaster white" aria-pressed="true" title="Alabaster"></button>
+          <button class="swatch" style="background:#7a8471" data-wall="#7a8471" data-name="Olive haze" aria-label="Olive haze" aria-pressed="false" title="Olive haze"></button>
+          <button class="swatch" style="background:#a35d4d" data-wall="#a35d4d" data-name="Terracotta" aria-label="Warm terracotta" aria-pressed="false" title="Terracotta"></button>
+          <button class="swatch" style="background:#d4c8ba" data-wall="#d4c8ba" data-name="Nordic greige" aria-label="Nordic greige" aria-pressed="false" title="Nordic greige"></button>
+          <button class="swatch" style="background:#2c3036" data-wall="#2c3036" data-name="Charcoal" aria-label="Parisian charcoal" aria-pressed="false" title="Charcoal"></button>
+          <label class="swatch" style="background:conic-gradient(#e44,#fd4,#4b8,#48d,#a4d,#e44)" title="Custom wall color"><input id="custom-color" type="color" value="#f4f1ea" aria-label="Choose a custom wall color" style="opacity:0;width:100%;height:100%;cursor:pointer"></label>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head"><h2>Floor finish</h2><span class="value" id="floor-value">White oak</span></div>
+        <div class="option-row">
+          <button class="option" data-floor="oak" aria-pressed="true">White oak</button>
+          <button class="option" data-floor="walnut" aria-pressed="false">Dark walnut</button>
+          <button class="option" data-floor="marble" aria-pressed="false">Carrara marble</button>
+          <button class="option" data-floor="concrete" aria-pressed="false">Polished concrete</button>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head"><h2>Lighting</h2><span class="value" id="light-value">Daylight</span></div>
+        <div class="option-row">
+          <button class="option" data-light="day" aria-pressed="true">Daylight</button>
+          <button class="option" data-light="sunset" aria-pressed="false">Golden hour</button>
+          <button class="option" data-light="evening" aria-pressed="false">Evening</button>
+        </div>
+      </section>
+      <section class="group">
+        <div class="group-head"><h2>Room details</h2><span class="value">7 × 8 × 3 m</span></div>
+        <div class="actions">
+          <button class="action primary" id="toggle-furniture" aria-pressed="true">Hide staging</button>
+          <button class="action" id="toggle-measurements" aria-pressed="false">Show dimensions</button>
+        </div>
+      </section>
+      <div class="status"><span class="status-dot"></span><span>Preparing 3D preview</span></div>
+    </aside>
+    <section class="viewport" aria-label="Interactive 3D interior">
+      <div class="viewport-label">Living suite</div>
+      <div id="vr-button"></div>
+      <div class="viewport-hint">Drag to orbit · Scroll to zoom</div>
+      <canvas id="scene"></canvas>
+    </section>
+  </main>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { VRButton } from 'three/addons/webxr/VRButton.js';
+
+    const canvas = document.querySelector('#scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.xr.enabled = true;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#c6d7dc');
+    const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 100);
+    camera.position.set(8.5, 6.1, 10.5);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 1.1, 0);
+    controls.enableDamping = true;
+    controls.maxPolarAngle = Math.PI * 0.49;
+    controls.minDistance = 5;
+    controls.maxDistance = 18;
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x79766d, 1.8));
+    const sun = new THREE.DirectionalLight(0xfff4df, 2.4);
+    sun.position.set(-4, 8, 5);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    scene.add(sun);
+    const fill = new THREE.PointLight(0xffd6a0, 18, 8);
+    fill.position.set(-2.5, 2.4, -2.4);
+    scene.add(fill);
+
+    const room = new THREE.Group();
+    scene.add(room);
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: '#c5a77d', roughness: 0.78 });
+    const wallMaterial = new THREE.MeshStandardMaterial({ color: '#f4f1ea', roughness: 0.92, side: THREE.DoubleSide });
+    function box(parent, size, position, material, castShadow = true) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
+      mesh.position.set(...position);
+      mesh.castShadow = castShadow;
+      mesh.receiveShadow = true;
+      parent.add(mesh);
+      return mesh;
+    }
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(7, 8), floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.receiveShadow = true;
+    room.add(floor);
+    const back = new THREE.Mesh(new THREE.PlaneGeometry(7, 3), wallMaterial);
+    back.position.set(0, 1.5, -4);
+    room.add(back);
+    const left = new THREE.Mesh(new THREE.PlaneGeometry(8, 3), wallMaterial);
+    left.rotation.y = Math.PI / 2;
+    left.position.set(-3.5, 1.5, 0);
+    room.add(left);
+    const front = new THREE.Mesh(new THREE.PlaneGeometry(7, 3), wallMaterial);
+    front.rotation.y = Math.PI;
+    front.position.set(0, 1.5, 4);
+    room.add(front);
+    const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(7, 8), new THREE.MeshStandardMaterial({ color: '#f8f7f2', side: THREE.DoubleSide }));
+    ceiling.rotation.x = Math.PI / 2;
+    ceiling.position.y = 3;
+    room.add(ceiling);
+    const trim = new THREE.MeshStandardMaterial({ color: '#fbfaf6', roughness: 0.6 });
+    box(room, [6.96, 0.1, 0.05], [0, 0.05, -3.96], trim, false);
+    box(room, [0.05, 0.1, 7.96], [-3.46, 0.05, 0], trim, false);
+    box(room, [6.96, 0.1, 0.05], [0, 0.05, 3.96], trim, false);
+
+    const glass = new THREE.Mesh(new THREE.PlaneGeometry(7.8, 2.5), new THREE.MeshPhysicalMaterial({ color: '#9fc4d3', transparent: true, opacity: 0.36, roughness: 0.12, metalness: 0.12, side: THREE.DoubleSide }));
+    glass.rotation.y = -Math.PI / 2;
+    glass.position.set(3.48, 1.55, 0);
+    room.add(glass);
+    const frameMat = new THREE.MeshStandardMaterial({ color: '#242724', metalness: 0.45, roughness: 0.4 });
+    for (const z of [-3.9, -1.3, 1.3, 3.9]) box(room, [0.12, 2.65, 0.08], [3.44, 1.5, z], frameMat, false);
+    box(room, [0.12, 0.07, 7.8], [3.44, 1.5, 0], frameMat, false);
+
+    const staging = new THREE.Group();
+    room.add(staging);
+    const boucle = new THREE.MeshStandardMaterial({ color: '#eae6df', roughness: 0.94 });
+    const cognac = new THREE.MeshStandardMaterial({ color: '#9a5a39', roughness: 0.52 });
+    const wood = new THREE.MeshStandardMaterial({ color: '#d6bd91', roughness: 0.55 });
+    const brass = new THREE.MeshStandardMaterial({ color: '#b99458', metalness: 0.7, roughness: 0.28 });
+    const sofa = new THREE.Group();
+    staging.add(sofa);
+    box(sofa, [2.5, 0.4, 0.92], [-0.5, 0.28, -1.25], boucle);
+    box(sofa, [2.5, 0.55, 0.24], [-0.5, 0.62, -1.68], boucle);
+    box(sofa, [0.25, 0.7, 0.9], [-1.68, 0.52, -1.25], boucle);
+    box(sofa, [0.25, 0.7, 0.9], [0.68, 0.52, -1.25], boucle);
+    box(sofa, [0.72, 0.38, 0.18], [-0.95, 0.68, -1.48], cognac);
+    const tableTop = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.12, 48), new THREE.MeshStandardMaterial({ color: '#d9c8ad', roughness: 0.5 }));
+    tableTop.position.set(-0.45, 0.42, 0.15);
+    tableTop.castShadow = true;
+    staging.add(tableTop);
+    const tableLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 0.35, 24), wood);
+    tableLeg.position.set(-0.45, 0.2, 0.15);
+    staging.add(tableLeg);
+    const chair = new THREE.Group();
+    chair.position.set(1.65, 0, 0.35);
+    chair.rotation.y = -0.65;
+    staging.add(chair);
+    box(chair, [0.82, 0.2, 0.75], [0, 0.38, 0], wood);
+    box(chair, [0.82, 0.52, 0.12], [0, 0.68, -0.31], wood);
+    box(chair, [0.65, 0.16, 0.58], [0, 0.54, -0.02], boucle);
+    const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.08, 24), frameMat);
+    lampBase.position.set(-2.35, 0.05, -1.7);
+    staging.add(lampBase);
+    const lampStem = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.8, 12), brass);
+    lampStem.position.set(-2.35, 0.98, -1.7);
+    staging.add(lampStem);
+    const lampArc = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.025, 10, 48, Math.PI / 2), brass);
+    lampArc.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+    lampArc.position.set(-1.72, 1.82, -1.7);
+    staging.add(lampArc);
+    const shade = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.22, 32, 1, true), brass);
+    shade.position.set(-1.1, 1.74, -1.7);
+    staging.add(shade);
+    const rug = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 3.2), new THREE.MeshStandardMaterial({ color: '#c9b79e', roughness: 1 }));
+    rug.rotation.x = -Math.PI / 2;
+    rug.position.set(-0.3, 0.012, -0.05);
+    staging.add(rug);
+
+    const measurements = new THREE.Group();
+    scene.add(measurements);
+    const measureMat = new THREE.LineBasicMaterial({ color: '#a4563d' });
+    function measure(start, end) {
+      const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...start), new THREE.Vector3(...end)]);
+      measurements.add(new THREE.Line(geometry, measureMat));
+    }
+    measure([-3.4, 0.08, 3.55], [3.4, 0.08, 3.55]);
+    measure([-3.3, 0.08, -3.8], [-3.3, 0.08, 3.8]);
+    measure([-3.3, 0.08, -3.8], [-3.3, 2.9, -3.8]);
+    measurements.visible = false;
+
+    document.querySelector('#vr-button').append(VRButton.createButton(renderer));
+    document.querySelectorAll('[data-wall]').forEach((button) => button.addEventListener('click', () => {
+      wallMaterial.color.set(button.dataset.wall);
+      document.querySelector('#wall-value').textContent = button.dataset.name;
+      document.querySelectorAll('[data-wall]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    }));
+    document.querySelector('#custom-color').addEventListener('input', (event) => {
+      wallMaterial.color.set(event.target.value);
+      document.querySelector('#wall-value').textContent = 'Custom';
+      document.querySelectorAll('[data-wall]').forEach((item) => item.setAttribute('aria-pressed', 'false'));
+    });
+    const floors = {
+      oak: ['#c5a77d', 0.78, 'White oak'],
+      walnut: ['#684b36', 0.55, 'Dark walnut'],
+      marble: ['#d2d0c9', 0.24, 'Carrara marble'],
+      concrete: ['#898a85', 0.66, 'Polished concrete']
+    };
+    document.querySelectorAll('[data-floor]').forEach((button) => button.addEventListener('click', () => {
+      const [color, roughness, label] = floors[button.dataset.floor];
+      floorMaterial.color.set(color);
+      floorMaterial.roughness = roughness;
+      document.querySelector('#floor-value').textContent = label;
+      document.querySelectorAll('[data-floor]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    }));
+    const lights = {
+      day: [0xfff4df, 2.4, 0xc6d7dc, 'Daylight'],
+      sunset: [0xffa765, 2.1, 0xc99c83, 'Golden hour'],
+      evening: [0xffc27a, 0.75, 0x30383c, 'Evening']
+    };
+    document.querySelectorAll('[data-light]').forEach((button) => button.addEventListener('click', () => {
+      const [color, intensity, background, label] = lights[button.dataset.light];
+      sun.color.setHex(color);
+      sun.intensity = intensity;
+      scene.background.setHex(background);
+      fill.intensity = button.dataset.light === 'evening' ? 34 : 18;
+      document.querySelector('#light-value').textContent = label;
+      document.querySelectorAll('[data-light]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    }));
+    document.querySelector('#toggle-furniture').addEventListener('click', (event) => {
+      staging.visible = !staging.visible;
+      event.currentTarget.textContent = staging.visible ? 'Hide staging' : 'Show staging';
+      event.currentTarget.setAttribute('aria-pressed', String(staging.visible));
+    });
+    document.querySelector('#toggle-measurements').addEventListener('click', (event) => {
+      measurements.visible = !measurements.visible;
+      event.currentTarget.textContent = measurements.visible ? 'Hide dimensions' : 'Show dimensions';
+      event.currentTarget.setAttribute('aria-pressed', String(measurements.visible));
+    });
+
+    function resize() {
+      const { width, height } = canvas.getBoundingClientRect();
+      if (!width || !height) return;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+    function renderFrame() {
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    const statusLabel = document.querySelector('.status span:last-child');
+    function startDesktopLoop() {
+      statusLabel.textContent = 'Desktop preview ready · VR unavailable here';
+      function animate() {
+        renderFrame();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    if (navigator.xr?.isSessionSupported) {
+      navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+        if (supported) {
+          statusLabel.textContent = 'Desktop preview ready · WebXR available';
+          renderer.setAnimationLoop(renderFrame);
+        } else {
+          startDesktopLoop();
+        }
+      }).catch(startDesktopLoop);
+    } else {
+      startDesktopLoop();
+    }
+  </script>
+</body>
+</html><!DOCTYPE html>
+</html>
